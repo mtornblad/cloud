@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "networkName": {
-            "defaultValue": "10.0",
+            "defaultValue": "MyNetwork",
             "type": "string",
             "metadata": {
                 "description": "This is the name of the Virtual Network"
@@ -22,8 +22,8 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-07-01",
-            "name": "[resourceGroup().location]",
-            "location": "[parameters('location')]",
+            "name": "[parameters('networkName')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
