@@ -76,24 +76,24 @@
             "location": "[resourceGroup().location]",
             "apiVersion": "2019-07-01",
             "properties": {
-              "securityRules": [
-                {
-                  "name": "AllowVnetInBound",
-                  "properties": {
-                    "access": "Allow",
-                    "description": "Allow inbound traffic from all VMs in VNET",
-                    "destinationAddressPrefix": "VirtualNetwork",
-                    "destinationPortRange": "*",
-                    "direction": "Inbound",
-                    "name": "AllowVnetInBound",
-                    "priority": 65000,
-                    "protocol": "*",
-                    "sourceAddressPrefix": "VirtualNetwork",
-                    "sourcePortRange": "*",
-                  }
-                }
-              ]
+                "securityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "destinationPortRange": "*",
+                            "direction": "Inbound",
+                            "name": "AllowVnetInBound",
+                            "priority": 65000,
+                            "protocol": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "sourcePortRange": "*"
+                        }
+                    }
+                ]
             }
-          }
+        }
     ]
 }
