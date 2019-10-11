@@ -72,50 +72,6 @@
                 "enableDdosProtection": false,
                 "enableVmProtection": false
             }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/admin')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
-                "serviceEndpoints": [],
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/internal')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/public')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
-            ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
-                "serviceEndpoints": [],
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
         }
     ]
 }
