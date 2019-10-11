@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_adfs01_name": {
+            "defaultValue": "adfs01",
+            "type": "String"
+        },
+        "disks_adfs01_OsDisk_1_28c75d84cb9f4cf3908b0e43e7da5f5b_externalid": {
+            "defaultValue": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Compute/disks/adfs01_OsDisk_1_28c75d84cb9f4cf3908b0e43e7da5f5b",
+            "type": "String"
+        },
+        "networkInterfaces_adfs01705_externalid": {
+            "defaultValue": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Network/networkInterfaces/adfs01705",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "name": "[parameters('virtualMachines_adfs01_name')]",
+            "location": "westeurope",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_adfs01_name'), '_OsDisk_1_28c75d84cb9f4cf3908b0e43e7da5f5b')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_adfs01_OsDisk_1_28c75d84cb9f4cf3908b0e43e7da5f5b_externalid')]"
+                        },
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_adfs01_name')]",
+                    "adminUsername": "tornbmat",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_adfs01705_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "https://tenant1diag.blob.core.windows.net/"
+                    }
+                }
+            }
+        }
+    ]
+}
