@@ -17,7 +17,9 @@
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "nsgName": "[concat(parameters('networkName'),'DefaultNSG')]"
+    },
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks",
@@ -34,45 +36,39 @@
                     {
                         "name": "internal",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
+                            "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName')]"
                             }
                         }
                     },
                     {
                         "name": "public",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName')]"
                             }
                         }
                     },
                     {
                         "name": "admin",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName')]"
                             }
                         }
                     }
-                ],
-                "enableDdosProtection": false,
-                "enableVmProtection": false
+                ]
             },
             "dependsOn": [
-                "new-nsg"
+                "[variables('nsgName')]"
             ]
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "new-nsg",
+            "name": "[variables('nsgName')]",
             "location": "[resourceGroup().location]",
             "apiVersion": "2019-07-01",
             "properties": {
