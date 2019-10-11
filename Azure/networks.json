@@ -35,36 +35,65 @@
                         "name": "internal",
                         "properties": {
                             "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                            }
                         }
                     },
                     {
                         "name": "public",
                         "properties": {
                             "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
-                            "serviceEndpoints": [],
-                            "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                            }
                         }
                     },
                     {
                         "name": "admin",
                         "properties": {
                             "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
-                            "serviceEndpoints": [],
-                            "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                            }
                         }
                     }
                 ],
-                "virtualNetworkPeerings": [],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
+            },
+            "dependsOn": [
+                "new-nsg"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "new-nsg",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2019-07-01",
+            "properties": {
+              "securityRules": [
+                {
+                  "name": "AllowVnetInBound",
+                  "properties": {
+                    "access": "Allow",
+                    "description": "Allow inbound traffic from all VMs in VNET",
+                    "destinationAddressPrefix": "VirtualNetwork",
+                    "destinationPortRange": "*",
+                    "direction": "Inbound",
+                    "name": "AllowVnetInBound",
+                    "priority": 65000,
+                    "protocol": "*",
+                    "sourceAddressPrefix": "VirtualNetwork",
+                    "sourcePortRange": "*",
+                  }
+                }
+              ]
             }
-        }
+          }
     ]
 }

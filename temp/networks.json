@@ -1,121 +1,247 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "networkName": {
-            "defaultValue": "10.0",
-            "type": "string",
-            "metadata": {
-                "description": "This is the name of the Virtual Network"
-            }
-        },
-        "netNumber": {
-            "defaultValue": "10.0",
-            "type": "string",
-            "metadata": {
-                "description": "This is the two first octets in the network to create"
-            }
-        },
-        "location": {
-            "defaultValue": "[resourceGroup().location]",
-            "type": "string",
-            "metadata": {
-                "description": "This is the location of the Virtual Network"
-            }
-        }
-    },
-    "variables": {},
-    "resources": [
+    "name": "string",
+    "type": "Microsoft.Network/virtualNetworks",
+    "apiVersion": "2019-04-01",
+    "location": "string",
+    "tags": {},
+    "properties": {
+      "addressSpace": {
+        "addressPrefixes": [
+          "string"
+        ]
+      },
+      "dhcpOptions": {
+        "dnsServers": [
+          "string"
+        ]
+      },
+      "subnets": [
         {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2019-07-01",
-            "name": "[parameters('networkName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[concat(parameters('netNumber'),'.0.0/16')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "internal",
-                        "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+          "id": "string",
+          "properties": {
+            "addressPrefix": "string",
+            "addressPrefixes": [
+              "string"
+            ],
+            "networkSecurityGroup": {
+              "id": "string",
+              "location": "string",
+              "tags": {},
+              "properties": {
+                "securityRules": [
+                  {
+                    "id": "string",
+                    "properties": {
+                      "description": "string",
+                      "protocol": "string",
+                      "sourcePortRange": "string",
+                      "destinationPortRange": "string",
+                      "sourceAddressPrefix": "string",
+                      "sourceAddressPrefixes": [
+                        "string"
+                      ],
+                      "sourceApplicationSecurityGroups": [
+                        {
+                          "id": "string",
+                          "location": "string",
+                          "tags": {},
+                          "properties": {}
                         }
+                      ],
+                      "destinationAddressPrefix": "string",
+                      "destinationAddressPrefixes": [
+                        "string"
+                      ],
+                      "destinationApplicationSecurityGroups": [
+                        {
+                          "id": "string",
+                          "location": "string",
+                          "tags": {},
+                          "properties": {}
+                        }
+                      ],
+                      "sourcePortRanges": [
+                        "string"
+                      ],
+                      "destinationPortRanges": [
+                        "string"
+                      ],
+                      "access": "string",
+                      "priority": "integer",
+                      "direction": "string"
                     },
-                    {
-                        "name": "public",
-                        "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
-                            "serviceEndpoints": [],
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "admin",
-                        "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
-                            "serviceEndpoints": [],
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    }
+                    "name": "string"
+                  }
                 ],
-                "virtualNetworkPeerings": [],
-                "enableDdosProtection": false,
-                "enableVmProtection": false
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/admin')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
+                "defaultSecurityRules": [
+                  {
+                    "id": "string",
+                    "properties": {
+                      "description": "string",
+                      "protocol": "string",
+                      "sourcePortRange": "string",
+                      "destinationPortRange": "string",
+                      "sourceAddressPrefix": "string",
+                      "sourceAddressPrefixes": [
+                        "string"
+                      ],
+                      "sourceApplicationSecurityGroups": [
+                        {
+                          "id": "string",
+                          "location": "string",
+                          "tags": {},
+                          "properties": {}
+                        }
+                      ],
+                      "destinationAddressPrefix": "string",
+                      "destinationAddressPrefixes": [
+                        "string"
+                      ],
+                      "destinationApplicationSecurityGroups": [
+                        {
+                          "id": "string",
+                          "location": "string",
+                          "tags": {},
+                          "properties": {}
+                        }
+                      ],
+                      "sourcePortRanges": [
+                        "string"
+                      ],
+                      "destinationPortRanges": [
+                        "string"
+                      ],
+                      "access": "string",
+                      "priority": "integer",
+                      "direction": "string"
+                    },
+                    "name": "string"
+                  }
+                ],
+                "resourceGuid": "string"
+              }
+            },
+            "routeTable": {
+              "id": "string",
+              "location": "string",
+              "tags": {},
+              "properties": {
+                "routes": [
+                  {
+                    "id": "string",
+                    "properties": {
+                      "addressPrefix": "string",
+                      "nextHopType": "string",
+                      "nextHopIpAddress": "string"
+                    },
+                    "name": "string"
+                  }
+                ],
+                "disableBgpRoutePropagation": "boolean"
+              }
+            },
+            "natGateway": {
+              "id": "string"
+            },
+            "serviceEndpoints": [
+              {
+                "service": "string",
+                "locations": [
+                  "string"
+                ]
+              }
             ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
-                "serviceEndpoints": [],
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/internal')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
+            "serviceEndpointPolicies": [
+              {
+                "id": "string",
+                "location": "string",
+                "tags": {},
+                "properties": {
+                  "serviceEndpointPolicyDefinitions": [
+                    {
+                      "id": "string",
+                      "properties": {
+                        "description": "string",
+                        "service": "string",
+                        "serviceResources": [
+                          "string"
+                        ]
+                      },
+                      "name": "string"
+                    }
+                  ]
+                }
+              }
             ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(parameters('networkName'), '/public')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('networkName'))]"
+            "resourceNavigationLinks": [
+              {
+                "id": "string",
+                "properties": {
+                  "linkedResourceType": "string",
+                  "link": "string"
+                },
+                "name": "string"
+              }
             ],
-            "properties": {
-                "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
-                "serviceEndpoints": [],
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
-            }
+            "serviceAssociationLinks": [
+              {
+                "id": "string",
+                "properties": {
+                  "linkedResourceType": "string",
+                  "link": "string",
+                  "allowDelete": "boolean",
+                  "locations": [
+                    "string"
+                  ]
+                },
+                "name": "string",
+                "type": "string"
+              }
+            ],
+            "delegations": [
+              {
+                "id": "string",
+                "properties": {
+                  "serviceName": "string",
+                  "actions": [
+                    "string"
+                  ]
+                },
+                "name": "string"
+              }
+            ]
+          },
+          "name": "string"
         }
-    ]
-}
+      ],
+      "virtualNetworkPeerings": [
+        {
+          "id": "string",
+          "properties": {
+            "allowVirtualNetworkAccess": "boolean",
+            "allowForwardedTraffic": "boolean",
+            "allowGatewayTransit": "boolean",
+            "useRemoteGateways": "boolean",
+            "remoteVirtualNetwork": {
+              "id": "string"
+            },
+            "remoteAddressSpace": {
+              "addressPrefixes": [
+                "string"
+              ]
+            },
+            "peeringState": "string"
+          },
+          "name": "string"
+        }
+      ],
+      "resourceGuid": "string",
+      "enableDdosProtection": "boolean",
+      "enableVmProtection": "boolean",
+      "ddosProtectionPlan": {
+        "id": "string"
+      }
+    },
+    "resources": []
+  }
+  
