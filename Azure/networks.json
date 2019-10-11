@@ -2,41 +2,30 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "networkName": {
-            "defaultValue": "MyNetwork",
-            "type": "string",
-            "metadata": {
-                "description": "This is the name of the Virtual Network"
-            }
-        },
-        "netNumber": {
-            "defaultValue": "10.0",
-            "type": "string",
-            "metadata": {
-                "description": "This is the two first octets in the network to create"
-            }
-        }
     },
     "variables": {
-        "nsgName": "[concat(parameters('networkName'),'DefaultNSG')]"
+        "networkName": "[concat(resourceGroup().name,'-StandardNetwork')]",
+        "netNumber": "10.0",
+        "location": "[resourceGroup().location]",
+        "nsgName": "[concat(resourceGroup().name,'-StandardNSG')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-07-01",
-            "name": "[parameters('networkName')]",
-            "location": "[resourceGroup().location]",
+            "name": "[variables('networkName')]",
+            "location": "[variables('location')]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[concat(parameters('netNumber'),'.0.0/16')]"
+                        "[concat(variables('netNumber'),'.0.0/16')]"
                     ]
                 },
                 "subnets": [
                     {
                         "name": "internal",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.0.0/24')]",
+                            "addressPrefix": "[concat(variables('netNumber'),'.0.0/24')]",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
                             }
@@ -45,7 +34,7 @@
                     {
                         "name": "public",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.1.0/24')]",
+                            "addressPrefix": "[concat(variables('netNumber'),'.1.0/24')]",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
                             }
@@ -54,7 +43,7 @@
                     {
                         "name": "admin",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('netNumber'),'.2.0/24')]",
+                            "addressPrefix": "[concat(variables('netNumber'),'.2.0/24')]",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
                             }
