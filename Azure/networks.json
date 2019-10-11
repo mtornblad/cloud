@@ -15,13 +15,6 @@
             "metadata": {
                 "description": "This is the two first octets in the network to create"
             }
-        },
-        "location": {
-            "defaultValue": "[resourceGroup().location]",
-            "type": "string",
-            "metadata": {
-                "description": "This is the location of the Virtual Network"
-            }
         }
     },
     "variables": {},
@@ -29,7 +22,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-07-01",
-            "name": "[parameters('networkName')]",
+            "name": "[resourceGroup().location]",
             "location": "[parameters('location')]",
             "properties": {
                 "addressSpace": {
