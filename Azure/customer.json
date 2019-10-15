@@ -37,7 +37,7 @@
             "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
         },
         "scriptlinks": {
-            "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1]"
+            "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1"
         },
         "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
     },
