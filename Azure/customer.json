@@ -37,7 +37,7 @@
             "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
         },
         "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]",
-        "storageAccountName": "[toLower(concat(parameters('namePrefix'), uniquestring(resourceGroup().id)))]"
+        "storageAccountName": "[toLower(concat(parameters('adminUsername'), uniquestring(resourceGroup().id)))]"
     },
     "resources": [
         {
