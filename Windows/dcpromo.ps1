@@ -14,7 +14,7 @@ $Params = @{
     InstallDns = $true
     LogPath = 'C:\Windows\NTDS'
     NoRebootOnCompletion = $true
-    SafeModeAdministratorPassword = $Password
+    SafeModeAdministratorPassword = ConvertTo-SecureString -String "Q¤#gjhgjhgjhgjh" -AsPlainText -Force
     SysvolPath = 'C:\Windows\SYSVOL'
     Force = $true
 }
