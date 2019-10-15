@@ -19,7 +19,7 @@
     },
     "variables": {
         "networkName": "[concat(parameters('namePrefix'),'-StandardNetwork')]",
-        "netNumber": "parameters('netNumber')",
+        "netNumber": "[parameters('netNumber')]",
         "location": "[resourceGroup().location]",
         "nsgName": "[concat(parameters('namePrefix'),'-StandardNSG')]"
     },
@@ -72,7 +72,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('nsgName')]",
-            "location": "variables('location')",
+            "location": "[variables('location')]",
             "apiVersion": "2019-07-01",
             "properties": {
                 "securityRules": []

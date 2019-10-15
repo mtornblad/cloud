@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name to prefix all resources created (keep short)!"
+            },
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        }
+    },
+    "variables": {
+        "templatelink": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
+        "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-01-01",
+            "name": "winserver-template",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[varaiables('virtualNetworkName')]"
+                    }
+                }
+            }
+        }
+    ]
+}
