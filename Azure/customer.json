@@ -7,7 +7,7 @@
             "metadata": {
                 "description": "Name to prefix all resources created (keep short)!"
             },
-            "defaultValue": "[resourceGroup().name]"
+            "defaultValue": "C1-"
         },
         "adminUsername": {
             "type": "string",
@@ -62,7 +62,7 @@
         },
         {
             "apiVersion": "2015-01-01",
-            "name": "vm-dc01",
+            "name": "[concat(parameters('namePrefix'), 'DC01')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[variables('virtualNetworkName')]",
@@ -98,7 +98,7 @@
         },
         {
             "apiVersion": "2015-01-01",
-            "name": "vm-adfs01",
+            "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[variables('virtualNetworkName')]",
