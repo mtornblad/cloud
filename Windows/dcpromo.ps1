@@ -1,5 +1,5 @@
 param (
-    [string]$DomainName, 
+    [String]$DomainName, 
     [SecureString]$Password
  )
 
