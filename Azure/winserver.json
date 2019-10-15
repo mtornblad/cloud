@@ -26,6 +26,12 @@
                 "description": "Name of existing network."
             }
         },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of existing storage account."
+            }
+        },
         "windowsOSVersion": {
             "type": "string",
             "defaultValue": "2019-Datacenter",
@@ -49,13 +55,12 @@
         "publicIPAddressName": "[concat(parameters('vmName'), '-PublicIP')]",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), variables('subnetName'))]",
         "location": "[resourceGroup().location]",
-        "storageAccountName": "[toLower(concat(parameters('namePrefix'), uniquestring(resourceGroup().id)))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-11-01",
-            "name": "[variables('storageAccountName')]",
+            "name": "[parameters('storageAccountName')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Standard_LRS"
@@ -103,7 +108,7 @@
             "name": "[parameters('vmName')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
             ],
             "properties": {
@@ -143,7 +148,7 @@
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).primaryEndpoints.blob]"
                     }
                 }
             }

@@ -24,7 +24,9 @@
     },
     "variables": {
         "templatelink": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
-        "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]"
+        "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]",
+        "storageAccountName": "[toLower(concat(parameters('namePrefix'), uniquestring(resourceGroup().id)))]"
+
     },
     "resources": [
         {
@@ -49,6 +51,9 @@
                     },
                     "virtualNetworkName": {
                         "value": "[varaiables('virtualNetworkName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[varaiables('storageAccountName')]"
                     }
                 }
             }
