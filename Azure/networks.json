@@ -1,6 +1,6 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
+    "contentVersion": "1.0.0.2",
     "parameters": {
         "virtualNetworkName": {
             "type": "string",
@@ -19,7 +19,7 @@
     "variables": {
         "netNumber": "[parameters('netNumber')]",
         "location": "[resourceGroup().location]",
-        "nsgName": "[concat(parameters('namePrefix'),'-StandardNSG')]"
+        "nsgName": "[concat(parameters('virtualNetworkName'),'NSG')]"
     },
     "resources": [
         {
