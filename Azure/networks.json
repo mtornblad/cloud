@@ -8,11 +8,18 @@
                 "description": "Name to prefix all resources created (keep short)!"
             },
             "defaultValue": "[resourceGroup().name]"
+        },
+        "netNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "2 first octets of IPv4 address!"
+            },
+            "defaultValue": "10.0"
         }
     },
     "variables": {
         "networkName": "[concat(parameters('namePrefix'),'-StandardNetwork')]",
-        "netNumber": "10.0",
+        "netNumber": "parameters('netNumber')",
         "location": "[resourceGroup().location]",
         "nsgName": "[concat(parameters('namePrefix'),'-StandardNSG')]"
     },
