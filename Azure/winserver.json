@@ -104,7 +104,6 @@
             "name": "[parameters('vmName')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
             ],
             "properties": {
