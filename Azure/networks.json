@@ -2,12 +2,19 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "namePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name to prefix all resources created (keep short)!"
+            },
+            "defaultValue": "[resourceGroup().name]"
+        }
     },
     "variables": {
-        "networkName": "[concat(resourceGroup().name,'-StandardNetwork')]",
+        "networkName": "[concat(parameters('namePrefix'),'-StandardNetwork')]",
         "netNumber": "10.0",
         "location": "[resourceGroup().location]",
-        "nsgName": "[concat(resourceGroup().name,'-StandardNSG')]"
+        "nsgName": "[concat(parameters('namePrefix'),'-StandardNSG')]"
     },
     "resources": [
         {
@@ -15,6 +22,9 @@
             "apiVersion": "2019-07-01",
             "name": "[variables('networkName')]",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('nsgName')]"
+            ],
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -50,15 +60,12 @@
                         }
                     }
                 ]
-            },
-            "dependsOn": [
-                "[variables('nsgName')]"
-            ]
+            }
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('nsgName')]",
-            "location": "[resourceGroup().location]",
+            "location": "variables('location')",
             "apiVersion": "2019-07-01",
             "properties": {
                 "securityRules": []
