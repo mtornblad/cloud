@@ -39,8 +39,7 @@
         "scriptlinks": {
             "dcpromo": "[uri(deployment().properties.templateLink.uri, '../windows/dcpromo.ps1')]"
         },
-        "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]",
-        "storageAccountName": "[toLower(concat(parameters('adminUsername'), uniquestring(resourceGroup().id)))]"
+        "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]"
     },
     "resources": [
         {
@@ -68,8 +67,7 @@
             "name": "[concat(parameters('namePrefix'), 'DC01')]",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[variables('virtualNetworkName')]",
-                "[variables('storageAccountName')]"
+                "[variables('virtualNetworkName')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -93,65 +91,8 @@
                     "subnetName": {
                         "value": "Internal"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2018-06-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('namePrefix'), 'DC01', '/dcpromo')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('namePrefix'), 'DC01'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.7",
-                "autoUpgradeMinorVersion":true,
-                "settings": {
-                    "fileUris": [
-                        "[variables('scriptlinks').dcpromo]"
-                    ],
-                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File dcpromo.ps1"
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
-            "type": "Microsoft.Resources/deployments",
-            "dependsOn": [
-                "[variables('virtualNetworkName')]",
-                "[variables('storageAccountName')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templatelinks').winserver]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'ADFS01')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
-                    },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
-                    },
-                    "virtualNetworkName": {
-                        "value": "[variables('virtualNetworkName')]"
-                    },
-                    "subnetName": {
-                        "value": "Internal"
-                    },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
+                    "script": {
+                        "value": "[variables('scriptlinks').dcpromo]"
                     }
                 }
             }

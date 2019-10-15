@@ -33,10 +33,11 @@
             },
             "defaultValue": "default"
         },
-        "storageAccountName": {
+        "script": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
-                "description": "Name of existing storage account."
+                "description": "Location of script to execute."
             }
         },
         "windowsOSVersion": {
@@ -58,7 +59,6 @@
     },
     "variables": {
         "nicName": "[concat(parameters('vmName'), '-Nic')]",
-        "subnetName": "internal",
         "publicIPAddressName": "[concat(parameters('vmName'), '-PublicIP')]",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
         "location": "[resourceGroup().location]"
@@ -139,6 +139,31 @@
                             "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
                         }
                     ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'), '/dcpromo')]",
+            "location": "[variables('location')]",
+                  "condition": "[greater(length(parameters('script')), 0)]",
+
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.7",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[parameters('script')]"
+                    ],
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ', lastIndexOf(parameters('script'), '/'))]"
+                },
+                "protectedSettings": {
                 }
             }
         }
