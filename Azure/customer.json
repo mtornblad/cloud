@@ -82,7 +82,8 @@
             "name": "vm-dc01",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[variables('virtualNetworkName')]"
+                "[variables('virtualNetworkName')]",
+                "[variables('storageAccountName')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -93,6 +94,42 @@
                 "parameters": {
                     "vmName": {
                         "value": "[concat(parameters('namePrefix'), 'DC01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "vm-adfs01",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('virtualNetworkName')]",
+                "[variables('storageAccountName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'ADFS01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
