@@ -1,6 +1,6 @@
 param (
     [string]$DomainName, 
-    [string]$Password
+    [SecureString]$Password
  )
 
 Install-WindowsFeature -Name AD-Domain-Services
