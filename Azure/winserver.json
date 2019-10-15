@@ -26,6 +26,13 @@
                 "description": "Name of existing network."
             }
         },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of existing network."
+            },
+            "defaultValue": "default"
+        },
         "storageAccountName": {
             "type": "string",
             "metadata": {
@@ -53,7 +60,7 @@
         "nicName": "[concat(parameters('vmName'), '-Nic')]",
         "subnetName": "internal",
         "publicIPAddressName": "[concat(parameters('vmName'), '-PublicIP')]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), variables('subnetName'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
         "location": "[resourceGroup().location]"
     },
     "resources": [

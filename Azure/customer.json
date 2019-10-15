@@ -21,23 +21,55 @@
             "metadata": {
                 "description": "Password for the Virtual Machine."
             }
+        },
+        "netNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "2 first octets of IPv4 address!"
+            },
+            "defaultValue": "10.0"
         }
     },
     "variables": {
-        "templatelink": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
+        "templatelinks": {
+            "winserver": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
+            "networks": "[uri(deployment().properties.templateLink.uri, 'networks.json')]"
+        },
         "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]",
         "storageAccountName": "[toLower(concat(parameters('namePrefix'), uniquestring(resourceGroup().id)))]"
-
     },
     "resources": [
         {
             "apiVersion": "2015-01-01",
-            "name": "vm-dc01",
+            "name": "[variables('virtualNetworkName')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('templatelink')]",
+                    "uri": "[variables('templatelinks').networks]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "netNumber": {
+                        "value": "[parameters('netNumber')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "vm-dc01",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('virtualNetworkName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks'.winserver)]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -52,6 +84,44 @@
                     },
                     "virtualNetworkName": {
                         "value": "[variables('virtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "vm-adfs01",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('virtualNetworkName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks'.winserver)]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'ADFS01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "Internal"
                     },
                     "storageAccountName": {
                         "value": "[variables('storageAccountName')]"

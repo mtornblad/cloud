@@ -2,12 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "namePrefix": {
+        "virtualNetworkName": {
             "type": "string",
             "metadata": {
-                "description": "Name to prefix all resources created (keep short)!"
-            },
-            "defaultValue": "[resourceGroup().name]"
+                "description": "Name of network to create!"
+            }
         },
         "netNumber": {
             "type": "string",
@@ -18,7 +17,6 @@
         }
     },
     "variables": {
-        "networkName": "[concat(parameters('namePrefix'),'-StandardNetwork')]",
         "netNumber": "[parameters('netNumber')]",
         "location": "[resourceGroup().location]",
         "nsgName": "[concat(parameters('namePrefix'),'-StandardNSG')]"
@@ -27,7 +25,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-07-01",
-            "name": "[variables('networkName')]",
+            "name": "[parameters('virtualNetworkName')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[variables('nsgName')]"
