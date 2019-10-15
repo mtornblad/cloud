@@ -161,7 +161,7 @@
                     "fileUris": [
                         "[parameters('script')]"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ', lastIndexOf(parameters('script'), '/'))]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File dcpromo.ps1 -domainname \"olle.com\" -password \"',parameters('adminPassword'),'\" ')]"
                 },
                 "protectedSettings": {
                 }
