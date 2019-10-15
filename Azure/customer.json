@@ -51,10 +51,10 @@
                         "value": "[parameters('adminPassword')]"
                     },
                     "virtualNetworkName": {
-                        "value": "[varaiables('virtualNetworkName')]"
+                        "value": "[variables('virtualNetworkName')]"
                     },
                     "storageAccountName": {
-                        "value": "[varaiables('storageAccountName')]"
+                        "value": "[variables('storageAccountName')]"
                     }
                 }
             }
