@@ -36,6 +36,9 @@
             "networks": "[uri(deployment().properties.templateLink.uri, 'networks.json')]",
             "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
         },
+        "scriptlinks": {
+            "dcpromo": "[uri(deployment().properties.templateLink.uri, '../windows/dcpromo.ps1')]"
+        },
         "virtualNetworkName": "[concat(parameters('namePrefix'), '-StandardNetwork')]",
         "storageAccountName": "[toLower(concat(parameters('adminUsername'), uniquestring(resourceGroup().id)))]"
     },
@@ -93,6 +96,27 @@
                     "storageAccountName": {
                         "value": "[variables('storageAccountName')]"
                     }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('namePrefix'), 'DC01', '/dcpromo')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('namePrefix'), 'DC01'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.7",
+                "autoUpgradeMinorVersion":true,
+                "settings": {
+                    "fileUris": [
+                        "[variables('scriptlinks').dcpromo]"
+                    ],
+                    "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File dcpromo.ps1"
                 }
             }
         },
