@@ -54,7 +54,7 @@
         "subnetName": "internal",
         "publicIPAddressName": "[concat(parameters('vmName'), '-PublicIP')]",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), variables('subnetName'))]",
-        "location": "[resourceGroup().location]",
+        "location": "[resourceGroup().location]"
     },
     "resources": [
         {
