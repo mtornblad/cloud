@@ -73,14 +73,6 @@ Configuration NewForest
             SafemodeAdministratorPassword = $DomainCreds
             ForestMode                    = 'WinThreshold'
         }
-
-        # See if a reboot is required after installing Exchange
-        PendingReboot AfterADDomain
-        {
-            Name      = 'AfterADDomain'
-            DependsOn = '[ADDomain]NewForest'
-        }
-
-        
+       
     }
 }
