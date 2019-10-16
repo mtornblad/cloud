@@ -26,6 +26,18 @@ Configuration NewForest
 {
     param
     (
+<#
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSCredential]
+        $Credential,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSCredential]
+        $SafeModePassword,
+#>
+
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]$DomainName,
@@ -33,6 +45,8 @@ Configuration NewForest
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Admincreds
+
+
     )
 
     Import-DscResource -ModuleName PSDscResources
@@ -43,11 +57,6 @@ Configuration NewForest
 
     node 'localhost'
     {
-        LocalConfigurationManager
-        {
-            RebootNodeIfNeeded = $true
-        }
-
         WindowsFeature 'ADDS' {
             Name   = 'AD-Domain-Services'
             Ensure = 'Present'
