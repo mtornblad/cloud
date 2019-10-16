@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name to prefix all resources created (keep short)!"
+            },
+            "defaultValue": "C1-"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            },
+            "defaultValue": "myadmin"
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "domainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Active Directory Domain"
+            },
+            "defaultValue": "contoso.com"
+        }
+    },
+
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(parameters('namePrefix'), 'DC01', '/NewForest')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.19",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/NewForest.ps1.zip?sp=r&st=2019-10-16T09:05:07Z&se=2020-10-16T17:05:07Z&spr=https&sv=2018-03-28&sig=K1WHiIBlrTftR9x3kap7pK1sM0V3Zbm%2FSaoiH48Wzsk%3D&sr=b",
+                    "ConfigurationFunction": "NewForest.ps1\\NewForest",
+                    "Properties": {
+                        "DomainName": "[parameters('domainName')]",
+                        "AdminCreds": {
+                            "UserName": "[parameters('adminUsername')]",
+                            "Password": "PrivateSettingsRef:AdminPassword"
+                        }
+                    }
+                },
+                "protectedSettings": {
+                    "Items": {
+                        "AdminPassword": "[parameters('adminPassword')]"
+                    }
+                }
+            }
+        }
+    ]
+
+}

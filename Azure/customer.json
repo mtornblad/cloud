@@ -107,6 +107,7 @@
                     "type": "extensions",
                     "apiVersion": "2019-03-01",
                     "name": "NewForest",
+                    "location": "westeurope",
                     "dependsOn": [
                         "[concat(parameters('namePrefix'), 'DC01')]"
                     ],
