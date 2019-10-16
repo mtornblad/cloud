@@ -26,18 +26,6 @@ Configuration NewForest
 {
     param
     (
-<#
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.Management.Automation.PSCredential]
-        $Credential,
-
-        [Parameter(Mandatory = $true)]
-        [ValidateNotNullOrEmpty()]
-        [System.Management.Automation.PSCredential]
-        $SafeModePassword,
-#>
-
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]$DomainName,
@@ -45,18 +33,23 @@ Configuration NewForest
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Admincreds
-
-
     )
 
     Import-DscResource -ModuleName PSDscResources
     Import-DscResource -ModuleName ActiveDirectoryDsc
+    Import-DscResource -Module ComputerManagementDsc
+
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
 
     node 'localhost'
     {
+        LocalConfigurationManager
+        {
+            RebootNodeIfNeeded = $true
+        }
+
         WindowsFeature 'ADDS' {
             Name   = 'AD-Domain-Services'
             Ensure = 'Present'
@@ -67,7 +60,7 @@ Configuration NewForest
             Ensure = 'Present'
         }
 
-        ADDomain 'contoso.com'
+        ADDomain NewForest
         {
 <#
             DomainName                    = 'contoso.com'
@@ -80,5 +73,14 @@ Configuration NewForest
             SafemodeAdministratorPassword = $DomainCreds
             ForestMode                    = 'WinThreshold'
         }
+
+        # See if a reboot is required after installing Exchange
+        PendingReboot AfterADDomain
+        {
+            Name      = 'AfterADDomain'
+            DependsOn = '[ADDomain]NewForest'
+        }
+
+        
     }
 }
