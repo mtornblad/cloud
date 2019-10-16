@@ -106,7 +106,7 @@
                 {
                     "type": "extensions",
                     "apiVersion": "2019-03-01",
-                    "name": "CreateADForest",
+                    "name": "NewForest",
                     "dependsOn": [
                         "[concat(parameters('namePrefix'), 'DC01')]"
                     ],
