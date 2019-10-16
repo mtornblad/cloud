@@ -28,6 +28,13 @@
                 "description": "2 first octets of IPv4 address!"
             },
             "defaultValue": "10.0"
+        },
+        "domainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Active Directory Domain"
+            },
+            "defaultValue": "contoso.com"
         }
     },
     "variables": {
@@ -39,6 +46,8 @@
         "scriptlinks": {
             "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1"
         },
+        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master//",
+        "_artifactsLocationSasToken": "",
         "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
     },
     "resources": [
@@ -90,12 +99,39 @@
                     },
                     "subnetName": {
                         "value": "Internal"
-                    },
-                    "script": {
-                        "value": "[variables('scriptlinks').dcpromo]"
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "apiVersion": "2019-03-01",
+                    "name": "CreateADForest",
+                    "properties": {
+                        "publisher": "Microsoft.Powershell",
+                        "type": "DSC",
+                        "typeHandlerVersion": "2.19",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "ModulesUrl": "[uri(variables('_artifactsLocation'), concat('DSC/NewForest.zip', variables('_artifactsLocationSasToken')))]",
+                            "ConfigurationFunction": "NewForest.ps1\\NewForest",
+                            "Properties": {
+                                "DomainName": "[parameters('domainName')]",
+                                "AdminCreds": {
+                                    "UserName": "[parameters('adminUsername')]",
+                                    "Password": "PrivateSettingsRef:AdminPassword"
+                                }
+                            }
+                        },
+                        "protectedSettings": {
+                            "Items": {
+                                "AdminPassword": "[parameters('adminPassword')]"
+                            }
+                        }
+                    }
+                }
+            ]
+
         }
     ]
 }
