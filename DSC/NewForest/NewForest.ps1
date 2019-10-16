@@ -37,6 +37,8 @@ Configuration NewForest
 
     Import-DscResource -ModuleName PSDscResources
     Import-DscResource -ModuleName ActiveDirectoryDsc
+    Import-DscResource -Module ComputerManagementDsc
+
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -58,7 +60,7 @@ Configuration NewForest
             Ensure = 'Present'
         }
 
-        ADDomain 'contoso.com'
+        ADDomain NewForest
         {
 <#
             DomainName                    = 'contoso.com'
@@ -71,5 +73,14 @@ Configuration NewForest
             SafemodeAdministratorPassword = $DomainCreds
             ForestMode                    = 'WinThreshold'
         }
+
+        # See if a reboot is required after installing Exchange
+        PendingReboot AfterADDomain
+        {
+            Name      = 'AfterADDomain'
+            DependsOn = '[ADDomain]NewForest'
+        }
+
+        
     }
 }
