@@ -73,7 +73,41 @@
             "location": "[variables('location')]",
             "apiVersion": "2019-07-01",
             "properties": {
-                "securityRules": []
+                "securityRules": [
+                    {
+                        "name": "RDP",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [
+                            ],
+                            "destinationPortRanges": [
+                            ],
+                            "sourceAddressPrefixes": [
+                            ],
+                            "destinationAddressPrefixes": [
+                            ],
+                            "destinationApplicationSecurityGroups": [
+                                {
+                                    "id": "RDP"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/applicationSecurityGroups",
+            "apiVersion": "2019-08-01",
+            "name": "RDP",
+            "location": "westeurope",
+            "properties": {
             }
         }
     ]

@@ -46,7 +46,7 @@
         "scriptlinks": {
             "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1"
         },
-        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master//",
+        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master",
         "_artifactsLocationSasToken": "",
         "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
     },
@@ -116,7 +116,7 @@
                         "typeHandlerVersion": "2.19",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                            "ModulesUrl": "[uri(variables('_artifactsLocation'), concat('DSC/NewForest.zip', variables('_artifactsLocationSasToken')))]",
+                            "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/NewForest.ps1.zip?sp=r&st=2019-10-16T09:05:07Z&se=2020-10-16T17:05:07Z&spr=https&sv=2018-03-28&sig=K1WHiIBlrTftR9x3kap7pK1sM0V3Zbm%2FSaoiH48Wzsk%3D&sr=b",
                             "ConfigurationFunction": "NewForest.ps1\\NewForest",
                             "Properties": {
                                 "DomainName": "[parameters('domainName')]",
