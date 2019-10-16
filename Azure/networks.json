@@ -94,7 +94,7 @@
                             ],
                             "destinationApplicationSecurityGroups": [
                                 {
-                                    "id": "RDP"
+                                "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', 'RDP')]"
                                 }
                             ]
                         }
