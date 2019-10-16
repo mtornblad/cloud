@@ -107,6 +107,9 @@
                     "type": "extensions",
                     "apiVersion": "2019-03-01",
                     "name": "CreateADForest",
+                    "dependsOn": [
+                        "[concat(parameters('namePrefix'), 'DC01')]"
+                    ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
                         "type": "DSC",
