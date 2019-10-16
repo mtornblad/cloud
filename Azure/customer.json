@@ -118,7 +118,7 @@
                 "typeHandlerVersion": "2.19",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/newforest.ps1.zip?sp=r&st=2019-10-16T18:59:17Z&se=2019-12-07T03:59:17Z&spr=https&sv=2018-03-28&sig=2gJASbIvEf79Ba%2FbBTjHWSMzec%2FAu1MXO%2BgtfFRDKTc%3D&sr=b",
+                    "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/newforest.ps1.zip?st=2019-10-16T18%3A50%3A23Z&se=2020-10-18T18%3A50%3A00Z&sp=rl&sv=2018-03-28&sr=b&sig=RZAzbUwhAF8mcNgozWwu3SzLEWlotyO3npU0Khs%2BOeo%3D",
                     "ConfigurationFunction": "NewForest.ps1\\NewForest",
                     "Properties": {
                         "DomainName": "[parameters('domainName')]",
