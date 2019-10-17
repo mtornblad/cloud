@@ -72,6 +72,10 @@
             "name": "[variables('nsgName')]",
             "location": "[variables('location')]",
             "apiVersion": "2019-07-01",
+            "dependsOn": [
+                "RDP"
+            ],
+
             "properties": {
                 "securityRules": [
                     {
