@@ -39,7 +39,7 @@ Configuration NewForest
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
 
-    node 'localhost'
+    node 'C1-DC01'
     {
         WindowsFeature 'ADDS'
         {
