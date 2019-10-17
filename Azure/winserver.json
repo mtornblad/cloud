@@ -55,6 +55,13 @@
             "metadata": {
                 "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
             }
+        },
+        "domainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Active Directory Domain"
+            },
+            "defaultValue": "contoso.com"
         }
     },
     "variables": {
@@ -95,7 +102,12 @@
                             }
                         }
                     }
-                ]
+                ],
+                "dnsSettings": {
+                    "dnsServers": [
+                        "10.0.0.4"
+                    ]
+                },
             }
         },
         {
@@ -145,9 +157,9 @@
         {
             "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'), '/dcpromo')]",
+            "name": "[concat(parameters('vmName'), '/script')]",
             "location": "[variables('location')]",
-                  "condition": "[greater(length(parameters('script')), 0)]",
+            "condition": "[greater(length(parameters('script')), 0)]",
 
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
@@ -164,6 +176,37 @@
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File dcpromo.ps1 -domainname \"olle.com\"')]"
                 },
                 "protectedSettings": {
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(parameters('vmName'), '/newforest')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.19",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/newforest.ps1.zip?st=2019-10-16T18%3A50%3A23Z&se=2020-10-18T18%3A50%3A00Z&sp=rl&sv=2018-03-28&sr=b&sig=RZAzbUwhAF8mcNgozWwu3SzLEWlotyO3npU0Khs%2BOeo%3D",
+                    "ConfigurationFunction": "NewForest.ps1\\NewForest",
+                    "Properties": {
+                        "DomainName": "[parameters('domainName')]",
+                        "AdminCreds": {
+                            "UserName": "[parameters('adminUsername')]",
+                            "Password": "PrivateSettingsRef:AdminPassword"
+                        }
+                    }
+                },
+                "protectedSettings": {
+                    "Items": {
+                        "AdminPassword": "[parameters('adminPassword')]"
+                    }
                 }
             }
         }

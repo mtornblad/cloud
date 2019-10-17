@@ -97,40 +97,46 @@
                     "virtualNetworkName": {
                         "value": "[variables('virtualNetworkName')]"
                     },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
                     "subnetName": {
                         "value": "Internal"
                     }
                 }
             }
-
         },
         {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2019-03-01",
-            "name": "[concat(parameters('namePrefix'), 'DC01', '/NewForest')]",
-            "location": "westeurope",
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'VM01')]",
+            "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat(parameters('namePrefix'), 'DC01')]"
+                "[variables('virtualNetworkName')]"
             ],
             "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.19",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/newforest.ps1.zip?st=2019-10-16T18%3A50%3A23Z&se=2020-10-18T18%3A50%3A00Z&sp=rl&sv=2018-03-28&sr=b&sig=RZAzbUwhAF8mcNgozWwu3SzLEWlotyO3npU0Khs%2BOeo%3D",
-                    "ConfigurationFunction": "NewForest.ps1\\NewForest",
-                    "Properties": {
-                        "DomainName": "[parameters('domainName')]",
-                        "AdminCreds": {
-                            "UserName": "[parameters('adminUsername')]",
-                            "Password": "PrivateSettingsRef:AdminPassword"
-                        }
-                    }
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
                 },
-                "protectedSettings": {
-                    "Items": {
-                        "AdminPassword": "[parameters('adminPassword')]"
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'VM01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "subnetName": {
+                        "value": "Internal"
                     }
                 }
             }

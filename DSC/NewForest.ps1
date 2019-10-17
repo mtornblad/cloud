@@ -43,7 +43,7 @@ Configuration NewForest
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
 
-    node 'localhost'
+    node 'T1-DC01'
     {
         LocalConfigurationManager
         {
@@ -62,17 +62,30 @@ Configuration NewForest
 
         ADDomain NewForest
         {
-<#
-            DomainName                    = 'contoso.com'
-            Credential                    = $Credential
-            SafemodeAdministratorPassword = $SafeModePassword
-            ForestMode                    = 'WinThreshold'
-#>
             DomainName                    = $DomainName
             Credential                    = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
             ForestMode                    = 'WinThreshold'
         }
        
+    }
+
+    Node 'T1-VM01'
+    {
+        WaitForAll DC
+        {
+            ResourceName      = '[ADDomain]NewForest'
+            NodeName          = 'T1-DC01'
+            RetryIntervalSec  = 15
+            RetryCount        = 30
+        }
+
+        Computer JoinDomain
+        {
+            Name             = 'T1-VM01'
+            DomainName       = $DomainName
+            Credential       = $DomainCreds
+            DependsOn        ='[WaitForAll]DC'
+        }
     }
 }

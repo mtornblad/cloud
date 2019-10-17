@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaces_C1_DC01_Nic_name": {
+            "defaultValue": "C1-DC01-Nic",
+            "type": "String"
+        },
+        "publicIPAddresses_C1_DC01_PublicIP_externalid": {
+            "defaultValue": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Network/publicIPAddresses/C1-DC01-PublicIP",
+            "type": "String"
+        },
+        "virtualNetworks_C1_StandardNetwork_externalid": {
+            "defaultValue": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Network/virtualNetworks/C1-StandardNetwork",
+            "type": "String"
+        },
+        "applicationSecurityGroups_RDP_externalid": {
+            "defaultValue": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Network/applicationSecurityGroups/RDP",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2019-08-01",
+            "name": "[parameters('networkInterfaces_C1_DC01_Nic_name')]",
+            "location": "westeurope",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Static",
+                            "publicIPAddress": {
+                                "id": "[parameters('publicIPAddresses_C1_DC01_PublicIP_externalid')]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_C1_StandardNetwork_externalid'), '/subnets/internal')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4",
+                            "applicationSecurityGroups": [
+                                {
+                                    "id": "[parameters('applicationSecurityGroups_RDP_externalid')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [
+                        "10.0.0.4"
+                    ]
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false
+            }
+        }
+    ]
+}
