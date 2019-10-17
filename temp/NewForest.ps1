@@ -27,38 +27,61 @@ Configuration NewForest
     param
     (
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [String]$DomainName,
 
         [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PSCredential]$Admincreds
     )
 
     Import-DscResource -ModuleName PSDscResources
     Import-DscResource -ModuleName ActiveDirectoryDsc
+    Import-DscResource -Module ComputerManagementDsc
 
-    [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
-
-
-    node 'localhost'
+    node 'T1-DC01'
     {
-        WindowsFeature 'ADDS'
+        LocalConfigurationManager
         {
+            RebootNodeIfNeeded = $true
+        }
+
+        WindowsFeature 'ADDS' {
             Name   = 'AD-Domain-Services'
             Ensure = 'Present'
         }
 
-        WindowsFeature 'RSAT'
-        {
+        WindowsFeature 'RSAT' {
             Name   = 'RSAT-AD-PowerShell'
             Ensure = 'Present'
         }
 
-        ADDomain 'contoso.com'
+        ADDomain NewForest
         {
-            DomainName                    = 'contoso.com'
-            Credential                    = $DomainCreds
-            SafemodeAdministratorPassword = $DomainCreds
+            DomainName                    = $DomainName
+            Credential                    = $Admincreds
+            SafemodeAdministratorPassword = $Admincreds
             ForestMode                    = 'WinThreshold'
+        }
+       
+    }
+
+    Node 'T1-VM01'
+    {
+        WaitForAll DC
+        {
+            ResourceName      = '[ADDomain]NewForest'
+            NodeName          = 'T1-DC01'
+            RetryIntervalSec  = 15
+            RetryCount        = 30
+        }
+
+        Computer JoinDomain
+        {
+            Name             = 'T1-VM01'
+            DomainName       = $DomainName
+            Credential       = $Admincreds
+            DependsOn        ='[WaitForAll]DC'
         }
     }
 }
