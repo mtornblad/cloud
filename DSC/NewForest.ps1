@@ -33,7 +33,7 @@ Configuration NewForest
         [System.Management.Automation.PSCredential]$Admincreds
     )
 
-    Import-DscResource -ModuleName PSDscResources
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName ActiveDirectoryDsc
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
@@ -62,3 +62,15 @@ Configuration NewForest
         }
     }
 }
+
+$cd = @{
+    AllNodes = @(
+        @{
+            NodeName = 'localhost'
+            PSDscAllowPlainTextPassword = $true
+            PSDscAllowDomainUser = $true
+        }
+    )
+}
+
+NewForest -ConfigurationData $cd
