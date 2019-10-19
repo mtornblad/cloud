@@ -198,6 +198,20 @@
                     "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/newforest.ps1.zip?st=2019-10-17T10%3A36%3A28Z&se=2020-10-18T10%3A36%3A00Z&sp=rl&sv=2018-03-28&sr=b&sig=5rgDRYU33ngQraFKpPoswqn8835JPtxV6bqmjQ8Gsaw%3D",
                     "ConfigurationFunction": "NewForest.ps1\\NewForest",
                     "Properties": {
+                        "configurationData": {
+                            "AllNodes": [
+                                {
+                                    "NodeName": "*",
+                                    "PSDscAllowPlainTextPassword": true,
+                                    "PSDscAllowDomainUser": true
+                                },
+                                {
+                                    "NodeName": "localhost",
+                                    "Role": "DC"
+                                }
+
+                            ]
+                        },
                         "DomainName": "[parameters('domainName')]",
                         "AdminCreds": {
                             "UserName": "[parameters('adminUsername')]",

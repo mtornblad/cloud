@@ -1,28 +1,4 @@
-﻿<#PSScriptInfo
-.VERSION 1.0
-.GUID 86c0280c-6b48-4689-815d-5bc0692845a4
-.AUTHOR Microsoft Corporation
-.COMPANYNAME Microsoft Corporation
-.COPYRIGHT (c) Microsoft Corporation. All rights reserved.
-.TAGS DSCConfiguration
-.LICENSEURI https://github.com/PowerShell/ActiveDirectoryDsc/blob/master/LICENSE
-.PROJECTURI https://github.com/PowerShell/ActiveDirectoryDsc
-.ICONURI
-.EXTERNALMODULEDEPENDENCIES
-.REQUIREDSCRIPTS
-.EXTERNALSCRIPTDEPENDENCIES
-.RELEASENOTES
-.PRIVATEDATA
-#>
-
-#Requires -module ActiveDirectoryDsc
-
-<#
-    .DESCRIPTION
-        This configuration will create a new domain with a new forest and a forest
-        functional level of Server 2016.
-#>
-Configuration NewForest
+﻿Configuration NewForest
 {
     param
     (
@@ -39,7 +15,7 @@ Configuration NewForest
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
 
-    node 'C1-DC01'
+    node $AllNodes.Where{$_.Role -eq 'DC'}.NodeName
     {
         WindowsFeature 'ADDS'
         {
@@ -62,15 +38,3 @@ Configuration NewForest
         }
     }
 }
-
-$cd = @{
-    AllNodes = @(
-        @{
-            NodeName = 'localhost'
-            PSDscAllowPlainTextPassword = $true
-            PSDscAllowDomainUser = $true
-        }
-    )
-}
-
-NewForest -ConfigurationData $cd
