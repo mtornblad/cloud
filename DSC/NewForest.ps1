@@ -14,6 +14,7 @@
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName ActiveDirectoryDsc
+    Import-DscResource -ModuleName ComputerManagementDsc
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -54,5 +55,17 @@
                 ForestMode                    = 'WinThreshold'
             }
         }   
+    }
+
+    If ($roles -contains "DomainMember") {
+        Node 'localhost'
+        {
+            Computer JoinDomain
+            {
+                Name       = 'localhost'
+                DomainName = $DomainName
+                Credential = $DomainCreds
+            }
+        }
     }
 }
