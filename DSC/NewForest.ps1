@@ -71,21 +71,23 @@
         }
     }
 
-    Node localhost
-    {
-        WindowsFeature ADCS-Cert-Authority
+    If ($roles -contains "CA") {
+        Node localhost
         {
-            Ensure = 'Present'
-            Name   = 'ADCS-Cert-Authority'
-        }
+            WindowsFeature ADCS-Cert-Authority
+            {
+                Ensure = 'Present'
+                Name   = 'ADCS-Cert-Authority'
+            }
 
-        AdcsCertificationAuthority CertificateAuthority
-        {
-            IsSingleInstance = 'Yes'
-            Ensure           = 'Present'
-            Credential       = $DomainCreds
-            CAType           = 'EnterpriseRootCA'
-            DependsOn        = '[WindowsFeature]ADCS-Cert-Authority'
-        }
+            AdcsCertificationAuthority CertificateAuthority
+            {
+                IsSingleInstance = 'Yes'
+                Ensure           = 'Present'
+                Credential       = $DomainCreds
+                CAType           = 'EnterpriseRootCA'
+                DependsOn        = '[WindowsFeature]ADCS-Cert-Authority'
+            }
+        }   
     }
 }
