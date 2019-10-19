@@ -1,0 +1,151 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name to prefix all resources created (keep short)!"
+            },
+            "defaultValue": "C1-"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            },
+            "defaultValue": "myadmin"
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "netNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "2 first octets of IPv4 address!"
+            },
+            "defaultValue": "10.0"
+        },
+        "domainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Active Directory Domain"
+            },
+            "defaultValue": "contoso.com"
+        }
+    },
+    "variables": {
+        "templatelinks": {
+            "winserver": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
+            "networks": "[uri(deployment().properties.templateLink.uri, 'networks.json')]",
+            "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
+        },
+        "scriptlinks": {
+            "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1"
+        },
+        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master",
+        "_artifactsLocationSasToken": "",
+        "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[variables('virtualNetworkName')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').networks]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "netNumber": {
+                        "value": "[parameters('netNumber')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'DC01')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('virtualNetworkName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": ["DC"]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            }
+        },
+            {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'ADFS01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": ["ADFS","DomainMember"]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            }
+        }
+    ]
+}
