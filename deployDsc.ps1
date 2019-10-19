@@ -1,9 +1,23 @@
-﻿$resourceGroup = 'admin'
-$storageName = 'shared'
-$configurationPath = '.\dsc\newforest.ps1'
-#Publish the configuration script to user storage
+﻿param
+(
+    [String]$resourceGroup = 'admin',
+    [String]$storageName = 'shared',
+    [string]$rootPathForFiles = '.\dsc'
+)
 
-Publish-AzVMDscConfiguration -ConfigurationPath $configurationPath -ResourceGroupName $resourceGroup -StorageAccountName $storageName -force 
-#-ConfigurationDataPath '.\dsc\newforest.psd1'
-#Set the VM to run the DSC configuration
+Get-ChildItem -Path $rootPathForFiles -Filter '*.ps1' | ForEach-Object {
+    $ps1 = "$($_.FullName)"
+    $psd = "$($_.DirectoryName)\$($_.BaseName).psd1"
+    if (Test-Path $psd) {
+        "Found $psd and include it in DSC configuration"
+        Publish-AzVMDscConfiguration -ConfigurationPath $ps1 -ResourceGroupName $resourceGroup -StorageAccountName $storageName -force -ConfigurationDataPath $psd
+    } else {
+        "No matching configuration data found"
+        Publish-AzVMDscConfiguration -ConfigurationPath $ps1 -ResourceGroupName $resourceGroup -StorageAccountName $storageName -force
+    }
+}
+
+
+
+#$(Test-Path $psd {
 # Set-AzVMDscExtension -Version '2.76' -ResourceGroupName $resourceGroup -VMName $vmName -ArchiveStorageAccountName $storageName -ArchiveBlobName "newforest.ps1" -AutoUpdate -ConfigurationName 'NewForest'
