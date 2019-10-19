@@ -6,7 +6,10 @@
         [String]$DomainName,
 
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$Admincreds
+        [System.Management.Automation.PSCredential]$Admincreds,
+
+
+        [string[]]$roles
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -15,8 +18,22 @@
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
 
-    node $AllNodes.Where{$_.Role -eq 'DC'}.NodeName
+If ($roles -contains "DC") {
+    
+    node 'localhost'
     {
+
+        File ConfigFile
+        {
+            DestinationPath = "c:\\temp\\config.xml"
+            Contents = "test"
+        }
+
+        LocalConfigurationManager 
+        {
+            RebootNodeIfNeeded = $true
+        }
+
         WindowsFeature 'ADDS'
         {
             Name   = 'AD-Domain-Services'
@@ -28,10 +45,10 @@
             Name   = 'RSAT-AD-PowerShell'
             Ensure = 'Present'
         }
-
-        ADDomain 'contoso.com'
+        
+        ADDomain NewForest
         {
-            DomainName                    = 'contoso.com'
+            DomainName                    = $DomainName
             Credential                    = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
             ForestMode                    = 'WinThreshold'
