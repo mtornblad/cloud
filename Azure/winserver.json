@@ -62,6 +62,13 @@
                 "description": "Name of Active Directory Domain"
             },
             "defaultValue": "contoso.com"
+        },
+        "roles": {
+            "type": "array",
+            "metadata": {
+                "description": "Array with roles to deploy to this machine"
+            },
+            "defaultValue": []
         }
     },
     "variables": {
@@ -198,9 +205,7 @@
                     "ModulesUrl": "https://shared.blob.core.windows.net/windows-powershell-dsc/NewForest.ps1.zip?st=2019-10-19T10%3A51%3A20Z&se=2021-10-20T10%3A51%3A00Z&sp=rl&sv=2018-03-28&sr=b&sig=jsJyxKh8e6i30sHPoPfTf%2Fl8IC%2FL%2FdOtpIzJPtczuSM%3D",
                     "ConfigurationFunction": "NewForest.ps1\\NewForest",
                     "Properties": {
-                        "roles": [
-                            "DC"
-                        ],
+                        "roles": "[parameters('roles')]",
                         "DomainName": "[parameters('domainName')]",
                         "AdminCreds": {
                             "UserName": "[parameters('adminUsername')]",
