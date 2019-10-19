@@ -2,13 +2,9 @@
     AllNodes = 
     @(
         @{
-            NodeName                    = '*'
+            NodeName                    = 'localhost'
             PSDscAllowPlainTextPassword = $true
             PSDscAllowDomainUser        = $true
-        },
-        @{
-            NodeName                    = 'localhost'
-            Role                        = 'DC'
         }
 
     )
