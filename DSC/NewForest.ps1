@@ -15,6 +15,8 @@
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName ActiveDirectoryDsc
     Import-DscResource -ModuleName ComputerManagementDsc
+    Import-DscResource -ModuleName ActiveDirectoryCSDsc
+
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -66,6 +68,24 @@
                 DomainName = $DomainName
                 Credential = $DomainCreds
             }
+        }
+    }
+
+    Node localhost
+    {
+        WindowsFeature ADCS-Cert-Authority
+        {
+            Ensure = 'Present'
+            Name   = 'ADCS-Cert-Authority'
+        }
+
+        AdcsCertificationAuthority CertificateAuthority
+        {
+            IsSingleInstance = 'Yes'
+            Ensure           = 'Present'
+            Credential       = $DomainCreds
+            CAType           = 'EnterpriseRootCA'
+            DependsOn        = '[WindowsFeature]ADCS-Cert-Authority'
         }
     }
 }
