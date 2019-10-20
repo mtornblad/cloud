@@ -46,8 +46,15 @@
 
             PendingReboot Domain
             {
-                Name      = 'AfterExchangeInstall'
+                Name      = 'Domain'
                 DependsOn = '[ADDomain]NewForest'
+                Name                        = 'ConfigMgr'
+                SkipComponentBasedServicing = $false
+                SkipWindowsUpdate           = $false
+                SkipPendingFileRename       = $false
+                SkipPendingComputerRename   = $false
+                SkipCcmClientSDK            = $false
+    
             }
         }   
     }
