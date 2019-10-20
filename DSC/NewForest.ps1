@@ -126,6 +126,7 @@
             {
                 Ensure = 'Present'
                 Name   = 'ADCS-Enroll-Web-Pol'
+                DependsOn        = '[PendingReboot]Domain'
             }
 
             AdcsEnrollmentPolicyWebService EnrollmentPolicyWebService
@@ -142,6 +143,7 @@
             {
                 Ensure = 'Present'
                 Name   = 'ADCS-Web-Enrollment'
+                DependsOn        = '[PendingReboot]Domain'
             }
     
             AdcsWebEnrollment WebEnrollment
@@ -156,6 +158,7 @@
             {
                 Ensure = 'Present'
                 Name   = 'ADCS-Online-Cert'
+                DependsOn        = '[PendingReboot]Domain'
             }
     
             AdcsOnlineResponder OnlineResponder
