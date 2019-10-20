@@ -48,7 +48,6 @@
             {
                 Name      = 'Domain'
                 DependsOn = '[ADDomain]NewForest'
-                Name                        = 'ConfigMgr'
                 SkipComponentBasedServicing = $false
                 SkipWindowsUpdate           = $false
                 SkipPendingFileRename       = $false
