@@ -43,9 +43,6 @@
             "apiVersion": "2015-01-01",
             "name": "[concat(parameters('namePrefix'), 'DC01')]",
             "type": "Microsoft.Resources/deployments",
-            "dependsOn": [
-                "[variables('virtualNetworkName')]"
-            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
