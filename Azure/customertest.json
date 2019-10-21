@@ -22,13 +22,6 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "netNumber": {
-            "type": "string",
-            "metadata": {
-                "description": "2 first octets of IPv4 address!"
-            },
-            "defaultValue": "10.0"
-        },
         "domainName": {
             "type": "string",
             "metadata": {
@@ -43,11 +36,6 @@
             "networks": "[uri(deployment().properties.templateLink.uri, 'networks.json')]",
             "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
         },
-        "scriptlinks": {
-            "dcpromo": "https://raw.githubusercontent.com/mtornblad/cloud/master/Windows/dcpromo.ps1"
-        },
-        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master",
-        "_artifactsLocationSasToken": "",
         "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
     },
     "resources": [
