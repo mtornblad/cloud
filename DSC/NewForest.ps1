@@ -19,6 +19,19 @@
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
+    node 'localhost'
+    {
+        LocalConfigurationManager
+        {
+            # RebootNodeIfNeeded = $true
+        }
+
+        WindowsFeature TelnetClient {
+            Name = 'Telnet-Client'
+            Ensure = 'Present'
+        }
+    }
+
 
     If ($roles -contains "DC") {
 
@@ -48,12 +61,6 @@
             {
                 Name      = 'Domain'
                 DependsOn = '[ADDomain]NewForest'
-                SkipComponentBasedServicing = $false
-                SkipWindowsUpdate           = $false
-                SkipPendingFileRename       = $false
-                SkipPendingComputerRename   = $false
-                SkipCcmClientSDK            = $false
-    
             }
         }   
     }
