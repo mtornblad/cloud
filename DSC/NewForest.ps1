@@ -21,10 +21,10 @@
 
     node 'localhost'
     {
-#        LocalConfigurationManager
-#        {
-#            RebootNodeIfNeeded = $true
-#        }
+        LocalConfigurationManager
+        {
+            RebootNodeIfNeeded = $true
+        }
 
         WindowsFeature TelnetClient {
             Name = 'Telnet-Client'
