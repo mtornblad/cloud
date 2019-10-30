@@ -12,12 +12,10 @@
         [string[]]$roles
     )
 
-    Import-DscResource -Module PSDesiredStateConfiguration
-    Import-DscResource -Module ActiveDirectoryDsc
-    Import-DscResource -Module ComputerManagementDsc
-    Import-DscResource -Module ActiveDirectoryCSDsc
-    Import-DscResource -ModuleName CertificateDsc
-
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName ActiveDirectoryDsc
+    Import-DscResource -ModuleName ComputerManagementDsc
+    Import-DscResource -ModuleName ActiveDirectoryCSDsc
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
@@ -25,8 +23,6 @@
     {
         LocalConfigurationManager
         {
-            ActionAfterReboot = 'ContinueConfiguration'
-            ConfigurationMode = 'ApplyOnly'
             RebootNodeIfNeeded = $true
         }
 
@@ -35,6 +31,7 @@
             Ensure = 'Present'
         }
     }
+
 
     If ($roles -contains "DC") {
 
@@ -50,28 +47,6 @@
             {
                 Name   = 'RSAT-AD-PowerShell'
                 Ensure = 'Present'
-                DependsOn = "[WindowsFeature]ADDS"
-            }
-
-            WindowsFeature RSAT-ADDS
-            {
-                Ensure = "Present"
-                Name = "RSAT-ADDS"
-                DependsOn = "[WindowsFeature]RSAT"
-            }
-
-            WindowsFeature RSAT-ADDS-Tools
-            {
-                Name = 'RSAT-ADDS-Tools'
-                Ensure = 'Present'
-                DependsOn = "[WindowsFeature]RSAT-ADDS"
-            }
-
-            WindowsFeature RSAT-AD-AdminCenter
-            {
-                Name = 'RSAT-AD-AdminCenter'
-                Ensure = 'Present'
-                DependsOn = "[WindowsFeature]RSAT-ADDS-Tools"
             }
         
             ADDomain NewForest
@@ -85,11 +60,8 @@
             PendingReboot Domain
             {
                 Name      = 'Domain'
-                SkipCcmClientSDK = $false
                 DependsOn = '[ADDomain]NewForest'
             }
-
-
         }   
     }
 
@@ -105,15 +77,14 @@
 
             PendingReboot Domain
             {
-                Name      = 'Domain'
-                SkipCcmClientSDK = $false
+                Name      = 'AfterExchangeInstall'
                 DependsOn = '[Computer]JoinDomain'
             }
         }
     }
     
     If ($roles -contains "CA") {
-        Node 'localhost'
+        Node localhost
         {
             WindowsFeature ADCS-Cert-Authority
             {
@@ -121,7 +92,7 @@
                 Name   = 'ADCS-Cert-Authority'
                 DependsOn        = '[PendingReboot]Domain'
             }
-    
+
             AdcsCertificationAuthority CertificateAuthority
             {
                 IsSingleInstance = 'Yes'
@@ -129,9 +100,8 @@
                 Credential       = $DomainCreds
                 CAType           = 'EnterpriseRootCA'
                 DependsOn        = '[WindowsFeature]ADCS-Cert-Authority'
-                CACommonName     = 'MyCACN'
             }
-    
+
             AdcsCertificationAuthoritySettings CertificateAuthoritySettings
             {
                 IsSingleInstance = 'Yes'
@@ -164,35 +134,14 @@
                 )
                 DependsOn        = '[AdcsCertificationAuthority]CertificateAuthority'
             }
-
-            <#C1-DC01.contoso.com\contoso-C1-DC01-CA#>
-            CertReq SSLCert
-            {
-                CARootName          = 'contoso-C1-DC01-CA'
-                CAServerFQDN        = 'C1-DC01.contoso.com'
-                Subject             = 'web.contoso.com'
-                KeyLength           = '2048'
-                Exportable          = $true
-                ProviderName        = 'Microsoft RSA SChannel Cryptographic Provider'
-                OID                 = '1.3.6.1.5.5.7.3.1'
-                KeyUsage            = '0xa0'
-                CertificateTemplate = 'WebServer'
-                AutoRenew           = $true
-                FriendlyName        = 'SSL Cert for Web Server'
-                Credential          = $Credential
-                KeyType             = 'RSA'
-                RequestType         = 'CMC'
-                DependsOn           = '[AdcsCertificationAuthoritySettings]CertificateAuthoritySettings'
-            }
     
- <#      
- 
             WindowsFeature ADCS-Enroll-Web-Pol
             {
                 Ensure = 'Present'
                 Name   = 'ADCS-Enroll-Web-Pol'
-                DependsOn        = '[CertReq]SSLCert'
+                DependsOn        = '[PendingReboot]Domain'
             }
+
             AdcsEnrollmentPolicyWebService EnrollmentPolicyWebService
             {
                 AuthenticationType = 'Kerberos'
@@ -202,6 +151,7 @@
                 Ensure             = 'Present'
                 DependsOn          = '[WindowsFeature]ADCS-Enroll-Web-Pol'
             }
+
             WindowsFeature ADCS-Web-Enrollment
             {
                 Ensure = 'Present'
@@ -217,9 +167,6 @@
                 DependsOn        = '[WindowsFeature]ADCS-Web-Enrollment'
             }
 
-#>    
-
-    
             WindowsFeature ADCS-Online-Cert
             {
                 Ensure = 'Present'
@@ -234,13 +181,13 @@
                 Credential       = $DomainCreds
                 DependsOn        = '[WindowsFeature]ADCS-Online-Cert'
             }
-    
+
             AdcsTemplate KerberosAuthentication
             {
                 Name   = 'KerberosAuthentication'
                 Ensure = 'Present'
                 DependsOn        = '[AdcsCertificationAuthority]CertificateAuthority'
-           }
+            }
         
         }   
     }
