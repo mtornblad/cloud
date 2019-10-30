@@ -181,8 +181,8 @@
             <#C1-DC01.contoso.com\contoso-C1-DC01-CA#>
             CertReq SSLCert
             {
-                CARootName          = 'contoso-C1-DC01-CA'
-                CAServerFQDN        = 'C1-DC01.contoso.com'
+                # CARootName          = 'contoso-C1-DC01-CA'
+                # CAServerFQDN        = 'C1-DC01.contoso.com'
                 Subject             = 'web.contoso.com'
                 KeyLength           = '2048'
                 Exportable          = $true
@@ -192,7 +192,7 @@
                 CertificateTemplate = 'WebServer'
                 AutoRenew           = $true
                 FriendlyName        = 'SSL Cert for Web Server'
-                Credential          = $Credential
+                Credential          = $DomainCreds
                 KeyType             = 'RSA'
                 RequestType         = 'CMC'
                 DependsOn           = '[AdcsCertificationAuthoritySettings]CertificateAuthoritySettings'
