@@ -17,7 +17,4 @@ Get-ChildItem -Path $rootPathForFiles -Filter '*.ps1' | ForEach-Object {
     }
 }
 
-
-
-#$(Test-Path $psd {
 # Set-AzVMDscExtension -Version '2.76' -ResourceGroupName $resourceGroup -VMName $vmName -ArchiveStorageAccountName $storageName -ArchiveBlobName "newforest.ps1" -AutoUpdate -ConfigurationName 'NewForest'
