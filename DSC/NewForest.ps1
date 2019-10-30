@@ -45,7 +45,30 @@
                 Name   = 'AD-Domain-Services'
                 Ensure = 'Present'
             }
+      
+            ADDomain NewForest
+            {
+                DomainName                    = $DomainName
+                Credential                    = $DomainCreds
+                SafemodeAdministratorPassword = $DomainCreds
+                ForestMode                    = 'WinThreshold'
+            }
 
+            PendingReboot Domain
+            {
+                Name      = 'Domain'
+                SkipCcmClientSDK = $false
+                DependsOn = '[ADDomain]NewForest'
+            }
+
+
+        }   
+    }    
+    
+    If ($roles -contains "RSAT") {
+
+        node 'localhost'
+        {
             WindowsFeature 'RSAT'
             {
                 Name   = 'RSAT-AD-PowerShell'
@@ -72,24 +95,14 @@
                 Name = 'RSAT-AD-AdminCenter'
                 Ensure = 'Present'
                 DependsOn = "[WindowsFeature]RSAT-ADDS-Tools"
-            }
-        
-            ADDomain NewForest
+            }      
+
+            WindowsFeature RSAT-ADCS
             {
-                DomainName                    = $DomainName
-                Credential                    = $DomainCreds
-                SafemodeAdministratorPassword = $DomainCreds
-                ForestMode                    = 'WinThreshold'
+                Ensure = "Present"
+                Name = "RSAT-ADCS"
+                DependsOn = "[WindowsFeature]RSAT"
             }
-
-            PendingReboot Domain
-            {
-                Name      = 'Domain'
-                SkipCcmClientSDK = $false
-                DependsOn = '[ADDomain]NewForest'
-            }
-
-
         }   
     }
 
