@@ -41,7 +41,7 @@
     "resources": [
         {
             "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
+            "name": "[concat(parameters('namePrefix'), 'DC01')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -66,42 +66,7 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["ADFS","DomainMember"]
-                    },
-                    "subnetName": {
-                        "value": "Internal"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'RMS01')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templatelinks').winserver]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
-                    },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
-                    },
-                    "virtualNetworkName": {
-                        "value": "[variables('virtualNetworkName')]"
-                    },
-                    "domainName": {
-                        "value": "[parameters('domainName')]"
-                    },
-                    "roles": {
-                        "value": ["DomainMember"]
+                        "value": ["DC", "CA"]
                     },
                     "subnetName": {
                         "value": "Internal"
