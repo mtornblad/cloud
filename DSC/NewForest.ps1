@@ -109,11 +109,19 @@
     If ($roles -contains "DomainMember") {
         Node "localhost"
         {
+
+            WaitForADDomain DscForestWait 
+            {
+                DomainName = $DomainName
+                Credential = $DomainCreds
+            }
+
             Computer JoinDomain
             {
                 Name       = "localhost"
                 DomainName = $DomainName
                 Credential = $DomainCreds
+                DependsOn = "[WaitForADDomain]DscForestWait"
             }
 
             PendingReboot Domain
