@@ -89,7 +89,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
+                        "value": "[concat(parameters('namePrefix'), 'CA01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -172,7 +172,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                        "value": "[concat(parameters('namePrefix'), 'FAS01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -213,7 +213,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                        "value": "[concat(parameters('namePrefix'), 'XA01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -254,7 +254,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                        "value": "[concat(parameters('namePrefix'), 'DDC01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -295,7 +295,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                        "value": "[concat(parameters('namePrefix'), 'SF01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
