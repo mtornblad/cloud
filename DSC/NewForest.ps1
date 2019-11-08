@@ -73,7 +73,7 @@
             {
                 Name   = "RSAT-AD-PowerShell"
                 Ensure = "Present"
-                DependsOn = "[WindowsFeature]ADDS"
+                #DependsOn = "[WindowsFeature]ADDS"
             }
 
             WindowsFeature RSAT-ADDS
