@@ -225,33 +225,3 @@
     "outputs": {
     }
 }
- {
-    "id": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Resources/deployments/C1-SF01/operations/E69ABDB65F4DA806",
-    "operationId": "E69ABDB65F4DA806",
-    "properties": {
-        "provisioningOperation": "Create",
-        "provisioningState": "Failed",
-        "timestamp": "2019-11-08T10:24:06.9121916Z",
-        "duration": "PT2M57.0269876S",
-        "trackingId": "33459a99-7fc5-4b80-8f89-59ff651bc230",
-        "statusCode": "Conflict",
-        "statusMessage": {
-            "status": "Failed",
-            "error": {
-                "code": "ResourceDeploymentFailure",
-                "message": "Resursåtgärden slutfördes med det slutliga etableringstillståndet Failed.",
-                "details": [
-                    {
-                        "code": "VMExtensionProvisioningError",
-                        "message": "Den virtuella datorn rapporterade ett fel vid bearbetningen av tillägget newforest. Felmeddelande: The DSC Extension received an incorrect input: Compilation errors occurred while processing configuration 'NewForest'. Please review the errors reported in error stream and modify your configuration code appropriately. Resource '[WindowsFeature]ADDS' required by '[WindowsFeature]RSAT' does not exist. Please ensure that the required resource exists and the name is properly formed. Cannot find path 'HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\3\\DSC' because it does not exist. Cannot find path 'HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\3\\DSC' because it does not exist. Cannot find path 'HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\3\\DSC' because it does not exist. Cannot find path 'HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\3\\DSC' because it does not exist. Resource '[WindowsFeature]ADDS' required by '[WindowsFeature]RSAT' does not exist. Please ensure that the required resource exists and the name is properly formed.\r\n\r\nAnother common error is to specify parameters of type PSCredential without an explicit type. Please be sure to use a typed parameter in DSC Configuration, for example:\r\n\r\n configuration Example {\r\n param([PSCredential] $UserAccount)\r\n ...\r\n }.\r\nPlease correct the input and retry executing the extension.."
-                    }
-                ]
-            }
-        },
-        "targetResource": {
-            "id": "/subscriptions/494df0b8-1c73-46ec-be20-86916386dba2/resourceGroups/Tenant1/providers/Microsoft.Compute/virtualMachines/C1-SF01/extensions/newforest",
-            "resourceType": "Microsoft.Compute/virtualMachines/extensions",
-            "resourceName": "C1-SF01/newforest"
-        }
-    }
-}
