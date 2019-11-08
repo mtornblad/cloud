@@ -66,14 +66,58 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["DC", "CA", "RSAT"]
+                        "value": [
+                            "DC",
+                            "RSAT"
+                        ]
                     },
                     "subnetName": {
                         "value": "Internal"
                     }
                 }
             }
-        }, 
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'CA01')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": [
+                            "CA",
+                            "RSAT"
+                        ]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                },
+                "dependsOn": [
+                    "[concat(parameters('namePrefix'), 'DC01')]"
+                ]
+            }
+        },
         {
             "apiVersion": "2015-01-01",
             "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
@@ -101,18 +145,24 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["ADFS","DomainMember", "RSAT"]
+                        "value": [
+                            "ADFS",
+                            "DomainMember",
+                            "RSAT"
+                        ]
                     },
                     "subnetName": {
                         "value": "Internal"
                     }
                 }
             },
-            "dependsOn": ["[concat(parameters('namePrefix'), 'DC01')]"]
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'CA01')]"
+            ]
         },
         {
             "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'RMS01')]",
+            "name": "[concat(parameters('namePrefix'), 'FAS01')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -137,14 +187,142 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["DomainMember", "RSAT"]
+                        "value": [
+                            "DomainMember",
+                            "RSAT"
+                        ]
                     },
                     "subnetName": {
                         "value": "Internal"
                     }
                 }
             },
-            "dependsOn": ["[concat(parameters('namePrefix'), 'DC01')]"]
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ]
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'XA01')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": [
+                            "DomainMember",
+                            "RSAT"
+                        ]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ]
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'DDC01')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": [
+                            "DomainMember",
+                            "RSAT"
+                        ]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ]
+        },
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'SF01')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'RMS01')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": [
+                            "DomainMember",
+                            "RSAT"
+                        ]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ]
         }
     ]
 }
