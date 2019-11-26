@@ -16,7 +16,7 @@
     Import-DscResource -Module ActiveDirectoryDsc
     Import-DscResource -Module ComputerManagementDsc
     Import-DscResource -Module ActiveDirectoryCSDsc
-    Import-DscResource -ModuleName CertificateDsc
+    Import-DscResource -Module CertificateDsc
 
 
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
@@ -164,7 +164,7 @@
                 CRLPublicationURLs =  @(
                     "65:C:\Windows\system32\CertSrv\CertEnroll\%3%8%9.crl"
                     "79:ldap:///CN=%7%8,CN=%2,CN=CDP,CN=Public Key Services,CN=Services,%6%10"
-                    "6:http://pki.contoso.com/CertEnroll/%3%8%9.crl"
+                    "6:http://pki.$DomainName/CertEnroll/%3%8%9.crl"
                 )
                 CRLOverlapUnits = 8
                 CRLOverlapPeriod = "Hours"
@@ -172,17 +172,8 @@
                 CRLPeriod = "Months"
                 ValidityPeriodUnits = 10
                 ValidityPeriod = "Years"
-                DSConfigDN = "CN=Configuration,DC=CONTOSO,DC=COM"
-                DSDomainDN = "DC=CONTOSO,DC=COM"
-                AuditFilter = @(
-                    "StartAndStopADCS"
-                    "BackupAndRestoreCADatabase"
-                    "IssueAndManageCertificateRequests"
-                    "RevokeCertificatesAndPublishCRLs"
-                    "ChangeCASecuritySettings"
-                    "StoreAndRetrieveArchivedKeys"
-                    "ChangeCAConfiguration"
-                )
+                DSConfigDN = "CN=Configuration,DC=CONTOSO,DC=COM" #TODO
+                DSDomainDN = "DC=CONTOSO,DC=COM" #TODO
                 DependsOn        = "[AdcsCertificationAuthority]CertificateAuthority"
             }
 

@@ -101,7 +101,9 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["DC"]
+                        "value": [
+                            "DC"
+                        ]
                     },
                     "subnetName": {
                         "value": "Internal"
@@ -109,7 +111,7 @@
                 }
             }
         },
-            {
+        {
             "apiVersion": "2015-01-01",
             "name": "[concat(parameters('namePrefix'), 'ADFS01')]",
             "type": "Microsoft.Resources/deployments",
@@ -139,7 +141,10 @@
                         "value": "[parameters('domainName')]"
                     },
                     "roles": {
-                        "value": ["ADFS","DomainMember"]
+                        "value": [
+                            "ADFS",
+                            "DomainMember"
+                        ]
                     },
                     "subnetName": {
                         "value": "Internal"

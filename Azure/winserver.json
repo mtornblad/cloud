@@ -33,13 +33,6 @@
             },
             "defaultValue": "default"
         },
-        "script": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Location of script to execute."
-            }
-        },
         "windowsOSVersion": {
             "type": "string",
             "defaultValue": "2019-Datacenter",
@@ -165,34 +158,9 @@
             }
         },
         {
-            "apiVersion": "2018-06-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'), '/script')]",
-            "location": "[variables('location')]",
-            "condition": "[greater(length(parameters('script')), 0)]",
-
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.7",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[parameters('script')]"
-                    ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File dcpromo.ps1 -domainname \"olle.com\"')]"
-                },
-                "protectedSettings": {
-                }
-            }
-        },
-        {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
-            "name": "[concat(parameters('vmName'), '/newforest')]",
+            "name": "[concat(parameters('vmName'), '/DSC')]",
             "location": "westeurope",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
