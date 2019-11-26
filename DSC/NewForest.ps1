@@ -136,6 +136,8 @@
     If ($roles -contains "CA") {
         Node "localhost"
         {
+
+        <#      
             WindowsFeature ADCS-Cert-Authority
             {
                 Ensure = "Present"
@@ -178,7 +180,7 @@
             }
 
     
- <#      
+
  
             WindowsFeature ADCS-Enroll-Web-Pol
             {
@@ -211,7 +213,6 @@
                 DependsOn        = "[WindowsFeature]ADCS-Web-Enrollment"
             }
 
-#>    
 
             WindowsFeature ADCS-Online-Cert
             {
@@ -228,7 +229,8 @@
                 DependsOn        = "[WindowsFeature]ADCS-Online-Cert"
             }        
         }   
-    }
+#>    
+}
 
     If ($roles -contains "ADFS") {
         Node "localhost"

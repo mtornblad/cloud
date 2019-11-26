@@ -106,17 +106,18 @@
                     "roles": {
                         "value": [
                             "CA",
+                            "DomainMember",
                             "RSAT"
                         ]
                     },
                     "subnetName": {
                         "value": "Internal"
                     }
-                },
-                "dependsOn": [
-                    "[concat(parameters('namePrefix'), 'DC01')]"
-                ]
-            }
+                }
+            },
+            "dependsOn": [
+                "[concat(parameters('namePrefix'), 'DC01')]"
+            ]
         },
         {
             "apiVersion": "2015-01-01",
