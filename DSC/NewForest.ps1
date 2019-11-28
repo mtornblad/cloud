@@ -177,6 +177,7 @@
                 DependsOn        = "[AdcsCertificationAuthority]CertificateAuthority"
             }
 
+<#
             WindowsFeature ADCS-Enroll-Web-Pol
             {
                 Ensure = "Present"
@@ -207,7 +208,7 @@
                 Credential       = $DomainCreds
                 DependsOn        = "[WindowsFeature]ADCS-Web-Enrollment"
             }
-
+#>
             WindowsFeature ADCS-Online-Cert
             {
                 Ensure = "Present"
@@ -251,7 +252,6 @@
                 RequestType         = "CMC"
             }
             
-    
         }
     }
 }
