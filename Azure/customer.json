@@ -103,7 +103,10 @@
                     "subnetName": {
                         "value": "Internal"
                     }
-                }
+                },
+                "dependsOn": [
+                   "[resourceId('Microsoft.Resources/deployments/', variables('virtualNetworkName'))]"
+                ]
             }
         },
         {
