@@ -103,7 +103,7 @@
                             },
                             "applicationSecurityGroups": [
                                 {
-                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses','RDP')]"
+                                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','RDP')]"
                                 }
                             ]
                         }
