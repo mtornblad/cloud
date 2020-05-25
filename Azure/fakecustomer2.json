@@ -277,7 +277,7 @@
         },
         {
             "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'DDC01')]",
+            "name": "[concat(parameters('namePrefix'), 'CC01')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -318,7 +318,7 @@
         },
         {
             "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'SF01')]",
+            "name": "[concat(parameters('namePrefix'), 'CC02')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
