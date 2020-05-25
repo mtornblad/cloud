@@ -72,46 +72,6 @@
             "apiVersion": "2015-01-01",
             "name": "[concat(parameters('namePrefix'), 'DC01')]",
             "type": "Microsoft.Resources/deployments",
-            "dependsOn": [
-                "[variables('virtualNetworkName')]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templatelinks').winserver]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'DC01')]"
-                    },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
-                    },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
-                    },
-                    "virtualNetworkName": {
-                        "value": "[variables('virtualNetworkName')]"
-                    },
-                    "domainName": {
-                        "value": "[parameters('domainName')]"
-                    },
-                    "roles": {
-                        "value": [
-                            "DC"
-                        ]
-                    },
-                    "subnetName": {
-                        "value": "Internal"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-01-01",
-            "name": "[concat(parameters('namePrefix'), 'DC01')]",
-            "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
