@@ -161,7 +161,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
             "name": "[concat(parameters('vmName'), '/DSC')]",
-            "location": "westeurope",
+            "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
             ],
