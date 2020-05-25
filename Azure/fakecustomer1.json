@@ -162,7 +162,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'DDC01')]"
+                        "value": "[concat(parameters('namePrefix'), 'CC01')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
@@ -203,7 +203,7 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "[concat(parameters('namePrefix'), 'SF01')]"
+                        "value": "[concat(parameters('namePrefix'), 'CC02')]"
                     },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
