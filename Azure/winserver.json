@@ -100,13 +100,13 @@
                             },
                             "subnet": {
                                 "id": "[variables('subnetRef')]"
-                            }
-                        },
-                        "applicationSecurityGroups": [
-                            {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses','RDP')]"
-                            }
-                        ]
+                            },
+                            "applicationSecurityGroups": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/publicIPAddresses','RDP')]"
+                                }
+                            ]
+                        }
                     }
                 ],
                 "dnsSettings": {
