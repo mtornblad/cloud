@@ -110,7 +110,7 @@
             "type": "Microsoft.Network/applicationSecurityGroups",
             "apiVersion": "2019-08-01",
             "name": "RDP",
-            "location": "westeurope",
+            "location": "[variables('location')]",
             "properties": {
             }
         }
