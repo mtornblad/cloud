@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "namePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name to prefix all resources created (keep short)!"
+            },
+            "defaultValue": "C1-"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            },
+            "defaultValue": "myadmin"
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "netNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "2 first octets of IPv4 address!"
+            },
+            "defaultValue": "10.0"
+        },
+        "domainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Active Directory Domain"
+            },
+            "defaultValue": "contoso.com"
+        }
+    },
+    "variables": {
+        "templatelinks": {
+            "winserver": "[uri(deployment().properties.templateLink.uri, 'winserver.json')]",
+            "networks": "[uri(deployment().properties.templateLink.uri, 'networks.json')]",
+            "storage": "[uri(deployment().properties.templateLink.uri, 'storage.json')]"
+        },
+        "_artifactsLocation": "https://raw.githubusercontent.com/mtornblad/cloud/master",
+        "_artifactsLocationSasToken": "",
+        "virtualNetworkName": "[concat(parameters('namePrefix'), 'StandardNetwork')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-01-01",
+            "name": "[concat(parameters('namePrefix'), 'XA02')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelinks').winserver]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[concat(parameters('namePrefix'), 'XA02')]"
+                    },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "virtualNetworkName": {
+                        "value": "[variables('virtualNetworkName')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "roles": {
+                        "value": [
+                            "DomainMember",
+                            "RSAT"
+                        ]
+                    },
+                    "subnetName": {
+                        "value": "Internal"
+                    }
+                }
+            }
+        }
+    ]
+}
