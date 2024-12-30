@@ -1,7 +1,7 @@
-#
-# Run from console, not SSH with sudo -i
-#
-apt update && apt -y upgrade && apt -y autoremove && apt clean
+apt update 
+apt -y upgrade
+apt -y autoremove
+apt clean
 truncate -s0 /etc/hostname
 hostnamectl set-hostname localhost
 rm /etc/netplan/50-cloud-init.yaml
