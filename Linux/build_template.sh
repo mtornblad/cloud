@@ -1,3 +1,4 @@
+sudo lvextend --resizefs -l +100%FREE ubuntu-vg/ubuntu-lv
 sudo apt update
 sudo apt -y upgrade
 sudo apt -y autoremove
