@@ -1,7 +1,7 @@
 sudo lvextend --resizefs -l +100%FREE ubuntu-vg/ubuntu-lv
 sudo apt update
 sudo apt -y upgrade
-sudo apt install cloud-init open-vm-tools vim
+sudo apt -y install cloud-init open-vm-tools vim
 sudo apt -y autoremove
 sudo apt clean
 
